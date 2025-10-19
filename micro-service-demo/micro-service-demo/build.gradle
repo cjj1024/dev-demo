@@ -1,0 +1,235 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version "1.1.4"
+    id 'com.google.protobuf' version '0.9.5'
+    id 'java'
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+ext {
+    springBootVersion = '2.7.18'
+    dubboVersion = '3.3.1'
+    tomcatVersion = '9.0.99'
+    grpcVersion = '1.59.0'
+    protobufVersion = '3.24.0'
+    protocVersion = '3.24.0'
+}
+
+
+
+
+allprojects {
+    sourceCompatibility = rootProject.sourceCompatibility
+    targetCompatibility = rootProject.targetCompatibility
+
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/'}
+        maven {
+            url 'https://maven.aliyun.com/repository/gradle-plugin'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/spring'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/spring-plugin'
+        }
+        mavenCentral()
+    }
+
+    configurations.all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+
+        resolutionStrategy  {
+            force "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion"
+            force "org.apache.tomcat.embed:tomcat-embed-el:$tomcatVersion"
+            force "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcatVersion"
+            force "org.apache.tomcat:tomcat-annotations-api:$tomcatVersion"
+        }
+    }
+}
+
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+            mavenBom "org.apache.dubbo:dubbo-bom:${dubboVersion}"
+        }
+    }
+    dependencies {
+        implementation "org.springframework.boot:spring-boot-starter"
+        implementation "org.springframework.boot:spring-boot-starter-log4j2"
+        implementation "com.alibaba:fastjson:2.0.43"
+        implementation "com.google.code.gson:gson:2.10.1"
+        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
+    }
+}
+
+project("dubbo-provider") {
+    dependencies {
+
+        implementation "org.apache.dubbo:dubbo-spring-boot-starter"
+        implementation "org.apache.dubbo:dubbo-zookeeper-curator5-spring-boot-starter"
+
+    }
+}
+
+project("dubbo-consumer") {
+    dependencies {
+        implementation project(":dubbo-provider")
+
+        implementation "org.springframework.boot:spring-boot-starter-web"
+        implementation "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion"
+        implementation "org.apache.dubbo:dubbo-spring-boot-starter"
+        implementation "org.apache.dubbo:dubbo-zookeeper-curator5-spring-boot-starter"
+
+    }
+}
+
+project("dubbo-grpc-provider") {
+    sourceSets {
+        main {
+            java {
+                srcDirs = ["src/main/java", "src/generated/source/proto/main/java"]
+                println "$srcDirs"
+            }
+        }
+    }
+
+    dependencies {
+
+        implementation "org.apache.dubbo:dubbo-spring-boot-starter"
+        implementation "org.apache.dubbo:dubbo-zookeeper-curator5-spring-boot-starter"
+
+    }
+}
+
+project("dubbo-grpc-consumer") {
+    sourceSets {
+        main {
+            java {
+                srcDirs = ["src/main/java", "src/generated/source/proto/main/java"]
+                println "$srcDirs"
+            }
+        }
+    }
+
+    dependencies {
+        implementation "org.springframework.boot:spring-boot-starter-web"
+        implementation "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion"
+        implementation "org.apache.dubbo:dubbo-spring-boot-starter"
+        implementation "org.apache.dubbo:dubbo-zookeeper-curator5-spring-boot-starter"
+
+    }
+}
+
+project("grpc-provider") {
+    apply plugin: 'com.google.protobuf'
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ["src/main/java", "src/generated/main/java"]
+                println "$srcDirs"
+            }
+        }
+    }
+
+    dependencies {
+
+        implementation platform('io.grpc:grpc-bom:1.59.0')
+
+        implementation 'io.grpc:grpc-core'
+        implementation 'io.grpc:grpc-protobuf'
+        implementation 'io.grpc:grpc-stub'
+        implementation 'io.grpc:grpc-netty-shaded'
+    }
+
+    protobuf {
+        protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+        plugins {
+            grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        }
+//        generateProtoTasks {
+//            all()*.plugins { grpc {} }
+//        }
+        generateProtoTasks {
+            all().each { task ->
+                task.builtins {
+                    java {
+                        outputSubDir = "../../../../../src/generated/main/java"
+                    }
+                }
+
+                task.plugins {
+                    grpc {
+                        outputSubDir = "../../../../../src/generated/main/java"
+                    }
+                }
+            }
+            tasks.withType(com.google.protobuf.gradle.GenerateProtoTask).configureEach {
+                outputs.upToDateWhen { false }
+            }
+        }
+    }
+
+}
+
+project("grpc-consumer") {
+    apply plugin: 'com.google.protobuf'
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ["src/main/java", "src/generated/main/java"]
+                println "$srcDirs"
+            }
+        }
+    }
+
+    dependencies {
+
+        implementation platform('io.grpc:grpc-bom:1.59.0')
+
+        implementation 'io.grpc:grpc-core'
+        implementation 'io.grpc:grpc-protobuf'
+        implementation 'io.grpc:grpc-stub'
+        implementation 'io.grpc:grpc-netty-shaded'
+    }
+
+    protobuf {
+        protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+        plugins {
+            grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        }
+//        generateProtoTasks {
+//            all()*.plugins { grpc {} }
+//        }
+        generateProtoTasks {
+            all().each { task ->
+                task.builtins {
+                    java {
+                        outputSubDir = "../../../../../src/generated/main/java"
+                    }
+                }
+
+                task.plugins {
+                    grpc {
+                        outputSubDir = "../../../../../src/generated/main/java"
+                    }
+                }
+            }
+            tasks.withType(com.google.protobuf.gradle.GenerateProtoTask).configureEach {
+                outputs.upToDateWhen { false }
+            }
+        }
+    }
+
+}

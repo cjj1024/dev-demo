@@ -1,0 +1,13 @@
+dubbo:
+  application:
+    name: zookeeper-dubbo-consumer
+    qos-port: 22222
+    logger: slf4j
+  registry:
+    address: zookeeper://localhost:2181
+  protocol:
+    name: tri
+    port: 50053
+
+server:
+  port: 8081

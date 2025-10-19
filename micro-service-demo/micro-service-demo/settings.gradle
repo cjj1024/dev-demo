@@ -1,0 +1,7 @@
+rootProject.name = "micro-service-demo"
+include 'dubbo-provider'
+include 'dubbo-consumer'
+include 'dubbo-grpc-provider'
+include 'dubbo-grpc-consumer'
+include 'grpc-provider'
+include 'grpc-consumer'

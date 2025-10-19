@@ -1,0 +1,17 @@
+### 
+curl https://api.stripe.com/v1/payment_methods \
+  -u "sk_test_51SHzeXErBBJq2QWl9vIjCQLVthYtLNYQNoTiMerYB00JtVqJNlhMI8zIF1BxD2SqRoHXwtSVAfeT65Y183POjivN00ASPpGmEz:" \
+  -d type=us_bank_account \
+  -d "us_bank_account[account_holder_type]"=individual \
+  -d "us_bank_account[account_number]"=000123456789 \
+  -d "us_bank_account[routing_number]"=110000000 \
+  -d "billing_details[name]"="John Doe"
+
+
+###
+GET http://127.0.0.1:8081/consumer/sayHello?name=world
+
+
+### dubbo-grpc
+###
+GET http://127.0.0.1:8082/consumer-grpc/sayHello?name=world2

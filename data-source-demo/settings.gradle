@@ -1,0 +1,3 @@
+rootProject.name = 'data-source-demo'
+include 'mybatis-demo'
+include 'mybatis-sharding-demo'
