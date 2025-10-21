@@ -1,0 +1,6 @@
+etcd:
+  endpoints:
+    - http://localhost:2379
+  key-prefix: /config/
+server:
+  port: 8089

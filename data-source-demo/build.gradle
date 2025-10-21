@@ -96,3 +96,18 @@ project("nacos-demo") {
         implementation "org.springframework.boot:spring-boot-starter-web"
     }
 }
+
+project("etcd-demo") {
+    dependencies {
+        implementation 'io.etcd:jetcd-core:0.7.7'
+        implementation 'io.etcd:jetcd-common:0.7.7'
+        implementation "org.springframework.boot:spring-boot-starter-web"
+    }
+}
+
+project("zookeeper-demo") {
+    dependencies {
+        implementation 'org.apache.curator:curator-framework:5.4.0'
+        implementation "org.springframework.boot:spring-boot-starter-web"
+    }
+}
