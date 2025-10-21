@@ -1,0 +1,8 @@
+
+
+logging:
+  level:
+    com.alibaba.cloud.nacos: DEBUG
+    org.springframework.cloud.bootstrap: DEBUG
+    org.springframework.core.env: DEBUG
+    org.springframework.context.config: DEBUG

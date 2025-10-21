@@ -1,6 +1,7 @@
 package org.example.mapper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.MybatisTestApplication;
 import org.example.repository.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import javax.sql.DataSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@SpringBootTest
+@SpringBootTest(classes = MybatisTestApplication.class)
 public class UserMapperTest {
     @Autowired
     UserMapper userMapper;
