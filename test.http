@@ -31,5 +31,23 @@ GET http://127.0.0.1:8089/etcd/test
 GET http://127.0.0.1:8080/zookeeper-demo/name
 ###
 POST http://127.0.0.1:8080/zookeeper-demo/name?value=jet1
+
+{}
 ###
 DELETE http://127.0.0.1:8080/zookeeper-demo/name
+
+
+###
+POST http://127.0.0.1:8080/redis-demo
+Content-Type: application/json
+
+{
+  "id": "{{$guid}}",
+  "name": "n1"
+}
+
+###
+GET http://127.0.0.1:8080/redis-demo/74fe5cfb-802b-4e72-89d0-5e90a005207c
+
+###
+DELETE http://127.0.0.1:8080/redis-demo/b0b0df09-b180-4d81-8f45-ea5f0a7970e1

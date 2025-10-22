@@ -111,3 +111,12 @@ project("zookeeper-demo") {
         implementation "org.springframework.boot:spring-boot-starter-web"
     }
 }
+
+project("redis-demo") {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        implementation "org.springframework.boot:spring-boot-starter-web"
+        implementation 'com.fasterxml.jackson.core:jackson-databind'
+        implementation 'org.redisson:redisson:3.52.0'
+    }
+}

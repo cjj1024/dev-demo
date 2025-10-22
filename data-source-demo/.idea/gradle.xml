@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/mybatis-demo" />
             <option value="$PROJECT_DIR$/mybatis-sharding-demo" />
             <option value="$PROJECT_DIR$/nacos-demo" />
+            <option value="$PROJECT_DIR$/redis-demo" />
             <option value="$PROJECT_DIR$/zookeeper-demo" />
           </set>
         </option>

@@ -1,7 +1,8 @@
 docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=123456 -v mysql_data:/var/lib/mysql -p 3306:3306 mysql:8.0
 
 
-docker run -d --name redis -p 6379:6379  -v redis_data:/data  -v $(pwd)/redis.conf:/usr/local/etc/redis/redis.conf redis:7.0 redis-server /usr/local/etc/redis/redis.conf
+docker run -d --name redis -p 6379:6379  -v redis_data:/data  redis:7.0 redis-server
+
 docker run -d --name redis -p 6379:6379  -v redis_data:/data  -v ${PWD}/redis.conf:/usr/local/etc/redis/redis.conf redis:7.0 redis-server /usr/local/etc/redis/redis.conf
 
 docker run -d --name mongodb -p 27017:27017 -v mongodb_data:/data/db  mongo:7.0
