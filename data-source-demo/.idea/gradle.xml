@@ -11,7 +11,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/elasticsearch-demo" />
             <option value="$PROJECT_DIR$/etcd-demo" />
+            <option value="$PROJECT_DIR$/kafka-demo" />
+            <option value="$PROJECT_DIR$/mongo-demo" />
             <option value="$PROJECT_DIR$/mybatis-demo" />
             <option value="$PROJECT_DIR$/mybatis-sharding-demo" />
             <option value="$PROJECT_DIR$/nacos-demo" />

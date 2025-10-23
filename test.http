@@ -51,3 +51,29 @@ GET http://127.0.0.1:8080/redis-demo/74fe5cfb-802b-4e72-89d0-5e90a005207c
 
 ###
 DELETE http://127.0.0.1:8080/redis-demo/b0b0df09-b180-4d81-8f45-ea5f0a7970e1
+
+
+
+### 
+POST http://127.0.0.1:8080/kafka-demo/send
+Content-Type: application/json
+
+{
+  "topic": "demo-topic",
+  "value": "hello: {{$guid}}"
+}
+
+
+
+###
+POST http://127.0.0.1:8080/elasticsearch-demo
+Content-Type: application/json
+
+{
+    "name": "Alice",
+    "age": 24,
+    "bio": "Love distributed systems"
+}
+
+###
+GET http://127.0.0.1:8080/elasticsearch-demo/Alice
