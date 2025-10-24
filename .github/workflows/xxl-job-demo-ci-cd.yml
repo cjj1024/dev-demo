@@ -16,6 +16,10 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+          
+      - name: Give Gradle wrapper execute permissions
+        run: chmod +x ./gradlew
+
 
       - name: Build with Gradle
         run: cd task-demo && ./gradlew :xxl-job-demo:clean :xxl-job-demo:build -x test
