@@ -4,7 +4,7 @@ server:
 xxl:
   job:
     admin:
-      addresses: http://localhost:8089/xxl-job-admin
+      addresses: ${XXL_JOB_ADMIN_ADDRESSES:http://localhost:8089/xxl-job-admin}
     executor:
       appname: xxl-job-demo-executor
       address:
