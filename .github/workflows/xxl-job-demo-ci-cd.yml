@@ -16,13 +16,15 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-          
       - name: Give Gradle wrapper execute permissions
-        run: chmod +x ./gradlew
+        run: 
 
 
       - name: Build with Gradle
-        run: cd task-demo && ./gradlew :xxl-job-demo:clean :xxl-job-demo:build -x test
+        run: |
+          cd task-demo
+          chmod +x ./gradlew
+          ./gradlew :xxl-job-demo:clean :xxl-job-demo:build -x test
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
