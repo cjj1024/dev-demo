@@ -77,3 +77,20 @@ Content-Type: application/json
 
 ###
 GET http://127.0.0.1:8080/elasticsearch-demo/Alice
+
+
+###
+POST http://127.0.0.1:8080/mongo-demo
+Content-Type: application/json
+
+{
+    "name": "Bob",
+    "age": 24,
+    "bio": "Love distributed systems"
+}
+
+###
+GET http://127.0.0.1:8080/mongo-demo
+
+###
+GET http://127.0.0.1:8080/mongo-demo/search?name=Bob

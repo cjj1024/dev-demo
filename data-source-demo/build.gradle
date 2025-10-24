@@ -134,3 +134,10 @@ project("elasticsearch-demo") {
         implementation "org.springframework.boot:spring-boot-starter-web"
     }
 }
+
+project("mongo-demo") {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+        implementation "org.springframework.boot:spring-boot-starter-web"
+    }
+}
