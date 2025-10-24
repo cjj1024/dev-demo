@@ -73,3 +73,11 @@ project("job-runner-demo") {
         implementation 'com.fasterxml.jackson.core:jackson-databind'
     }
 }
+
+project("xxl-job-demo") {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'com.xuxueli:xxl-job-core:2.4.0'
+        implementation 'com.h2database:h2'
+    }
+}
