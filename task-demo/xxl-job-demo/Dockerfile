@@ -2,7 +2,7 @@
 FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
-COPY build/libs/app.jar app.jar
+COPY build/libs/xxl-job-demo.jar xxl-job-demo.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java","-jar","xxl-job-demo.jar"]
