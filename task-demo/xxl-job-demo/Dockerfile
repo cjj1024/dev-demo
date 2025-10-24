@@ -1,5 +1,5 @@
 # Dockerfile
-FROM openjdk:21-jdk-alpine
+FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 COPY xxl-job-demo/build/libs/xxl-job-demo.jar xxl-job-demo.jar
