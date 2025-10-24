@@ -1,0 +1,75 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version "1.1.4"
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+ext {
+    springBootVersion = '2.7.18'
+}
+
+allprojects {
+    sourceCompatibility = rootProject.sourceCompatibility
+    targetCompatibility = rootProject.targetCompatibility
+
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/'}
+        maven {
+            url 'https://maven.aliyun.com/repository/gradle-plugin'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/spring'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/spring-plugin'
+        }
+        mavenCentral()
+    }
+
+    configurations.all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        }
+    }
+    dependencies {
+        implementation "org.springframework.boot:spring-boot-starter"
+        implementation "org.springframework.boot:spring-boot-starter-log4j2"
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        testImplementation  "org.springframework.boot:spring-boot-starter-test"
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+
+
+project("job-runner-demo") {
+    tasks.register("prepareKotlinBuildScriptModel"){}
+    dependencies {
+        implementation 'org.jobrunr:jobrunr-spring-boot-3-starter:7.3.2'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        runtimeOnly 'com.h2database:h2:2.2.224'
+        implementation 'com.fasterxml.jackson.core:jackson-databind'
+    }
+}
