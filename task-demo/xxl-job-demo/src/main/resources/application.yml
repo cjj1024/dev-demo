@@ -7,7 +7,7 @@ xxl:
       addresses: ${XXL_JOB_ADMIN_ADDRESSES:http://localhost:8089/xxl-job-admin}
     executor:
       appname: xxl-job-demo-executor
-      address:
+      address: ${XXL_JOB_EXECUTE_ADDRESSES:http://localhost}
       ip:
       port: 9999
       logpath: /data/applogs/xxl-job/jobhandler
