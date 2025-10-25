@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xxl-job-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: xxl-job-demo
+  template:
+    metadata:
+      labels:
+        app: xxl-job-demo
+    spec:
+      containers:
+        - name: xxl-job-demo
+          image: cuijj/tasxxl-job-demo:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: XXL_JOB_ADMIN_ADDRESSES
+              value: "http://host.docker.internal:8089/xxl-job-admin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xxl-job-demo-service
+spec:
+  selector:
+    app: xxl-job-demo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
