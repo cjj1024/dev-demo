@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: xxl-job-demo
 spec:
-  replicas: 2
+  replicas: 0
   selector:
     matchLabels:
       app: xxl-job-demo
@@ -11,33 +11,37 @@ spec:
     metadata:
       labels:
         app: xxl-job-demo
-    spec:
+    spec: 
+      hostNetwork: true
       containers:
         - name: xxl-job-demo
           image: cuijj/tasxxl-job-demo:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
+            - containerPort: 9999
             - containerPort: 8080
           env:
             - name: XXL_JOB_ADMIN_ADDRESSES
               value: "http://host.docker.internal:8089/xxl-job-admin"
             - name: XXL_JOB_EXECUTE_ADDRESSES
-              value: "http://host.docker.internal"
+              value: "http://host.docker.internal:30385"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: xxl-job-demo-service
 spec:
+  type: NodePort  
   selector:
     app: xxl-job-demo
   ports:
-    - name: p80
-      protocol: TCP
-      port: 80
-      targetPort: 8080
     - name: p9000
       protocol: TCP
-      port: 9000
-      targetPort: 9000
-  type: LoadBalancer
+      port: 9999
+      targetPort: 9999
+      nodePort: 30385
+    - name: p80
+      protocol: TCP
+      port: 8080 
+      targetPort: 8080 
+      nodePort: 30397
