@@ -13,7 +13,7 @@ docker run -d --name zookeeper --network dev_net -p 2181:2181 -p 2888:2888 -p 38
 
 docker run -d --name kafka --network dev_net --hostname kafka -p 9092:9092 -e CLUSTER_ID=kafka_clsuter_1 -e KAFKA_BROKER_ID=1 -e KAFKA_PROCESS_ROLES=broker,controller -e KAFKA_NODE_ID=1 -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093 -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 -e KAFKA_AUTO_CREATE_TOPICS_ENABLE=true -v kafka_data:/var/lib/kafka/data confluentinc/cp-kafka:latest
 
-docker run -d --name etcd --network dev_net -p 2379:2379 -p 2380:2380 -v etcd_data:/bitnami/etcd -e ALLOW_NONE_AUTHENTICATION=yes -e ETCD_NAME=node1 -e ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379 -e ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379 -e ETCD_INITIAL_ADVERTISE_PEER_URLS=http://0.0.0.0:2380 -e ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380 -e ETCD_INITIAL_CLUSTER=node1=http://0.0.0.0:2380 bitnami/etcd:3.5.7
+docker run -d --name etcd --network dev_net -p 2379:2379 -p 2380:2380 -v etcd_data:/etcd-data -e ALLOW_NONE_AUTHENTICATION=yes -e ETCD_NAME=node1 -e ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379 -e ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379 -e ETCD_INITIAL_ADVERTISE_PEER_URLS=http://0.0.0.0:2380 -e ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380 -e ETCD_INITIAL_CLUSTER=node1=http://0.0.0.0:2380   quay.io/coreos/etcd:v3.5.7
 
 docker run -d --name nacos -p 8848:8848 -e MODE=standalone nacos/nacos-server:v2.3.2 
 
@@ -30,4 +30,4 @@ docker run -d --name xxl-job-admin --network dev_net -p 8089:8080 -e PARAMS="--s
 docker run -d --name xxl-job-demo --network dev_net -e XXL_JOB_ADMIN_ADDRESSES=http://xxl-job-admin:8080/xxl-job-admin cuijj/tasxxl-job-demo:1.0.0
 
 
-docker run -d --name my-postgres  -e POSTGRES_USER=admin  -e POSTGRES_PASSWORD=123456 -e POSTGRES_DB=testdb -v pg_data:/var/lib/postgresql/data -p 5432:5432 postgres:16
+docker run -d --name postgres  -e POSTGRES_USER=admin  -e POSTGRES_PASSWORD=123456 -e POSTGRES_DB=testdb -v pg_data:/var/lib/postgresql/data -p 5432:5432 postgres:16
