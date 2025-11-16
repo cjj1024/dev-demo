@@ -31,3 +31,12 @@ docker run -d --name xxl-job-demo --network dev_net -e XXL_JOB_ADMIN_ADDRESSES=h
 
 
 docker run -d --name postgres  -e POSTGRES_USER=admin  -e POSTGRES_PASSWORD=123456 -e POSTGRES_DB=testdb -v pg_data:/var/lib/postgresql/data -p 5432:5432 postgres:16
+
+
+
+### Ollama
+docker run -d --name ollama -p 11434:11434 -v ollama:/root/.ollama ollama/ollama
+
+docker exec -it ollama ollama pull llama3:8b
+
+docker exec -it ollama ollama run llama3:8b
