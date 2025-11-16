@@ -1,15 +1,25 @@
 package org.example.config;
 
+import dev.langchain4j.agent.tool.ToolSpecification;
+import dev.langchain4j.agent.tool.ToolSpecifications;
+import dev.langchain4j.memory.chat.ChatMemoryProvider;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.StreamingChatModel;
+import dev.langchain4j.model.chat.request.json.JsonObjectSchema;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.service.AiServices;
+import dev.langchain4j.service.tool.ToolExecutor;
 import org.example.listener.TestChatModelListener;
+import org.example.service.ChatAssistant;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class LLMConfig {
@@ -52,6 +62,9 @@ public class LLMConfig {
         return OpenAiChatModel.builder()
                 .modelName("huihui_ai/deepseek-r1-abliterated:8b")
                 .baseUrl("http://localhost:11434/v1")
+                .maxRetries(1)
+                .timeout(Duration.ofHours(1))
+                .logRequests(true)
                 .build();
     }
 
@@ -76,6 +89,36 @@ public class LLMConfig {
         return OpenAiStreamingChatModel.builder()
                 .modelName("huihui_ai/deepseek-r1-abliterated:8b")
                 .baseUrl("http://localhost:11434/v1")
+                .build();
+    }
+
+    @Bean(name = "memoryChatAssistant")
+    public ChatAssistant memoryChatAssistant(@Qualifier("poixe") ChatModel chatModel, RedisChatMemoryStore redisChatMemoryStore) {
+        ChatMemoryProvider chatMemoryProvider = memoryId -> MessageWindowChatMemory.builder()
+                .id(memoryId)
+                .maxMessages(100)
+//                .chatMemoryStore(redisChatMemoryStore)
+                .build();
+
+        ToolSpecification toolSpecification = ToolSpecification.builder()
+                .name("invoice_assistant")
+                .description("开发票")
+                .parameters(JsonObjectSchema.builder()
+                        .addStringProperty("name", "抬头")
+                        .addIntegerProperty("amount", "金额")
+                        .build())
+                .build();
+        ToolExecutor toolExecutor = ((toolExecutionRequest, memoryId) -> {
+            System.out.println(toolExecutionRequest.id());
+            System.out.println(toolExecutionRequest.name());
+            System.out.println(toolExecutionRequest.arguments());
+            return "开具成功";
+        });
+
+        return AiServices.builder(ChatAssistant.class)
+                .chatModel(chatModel)
+                .chatMemoryProvider(chatMemoryProvider)
+                .tools(Map.of(toolSpecification, toolExecutor))
                 .build();
     }
 }
