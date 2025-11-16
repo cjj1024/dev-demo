@@ -18,19 +18,4 @@ public class RedisDemoApplication {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(RedisDemoApplication.class, args);
     }
 
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory factory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(factory);
-        return template;
-    }
-
-    @Bean(destroyMethod = "shutdown")
-    public RedissonClient redissonClient() {
-        Config config = new Config();
-        config.useSingleServer()
-                .setAddress("redis://127.0.0.1:6379")
-                .setPassword(null);
-        return Redisson.create(config);
-    }
 }
