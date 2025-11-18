@@ -40,3 +40,6 @@ docker run -d --name ollama -p 11434:11434 -v ollama:/root/.ollama ollama/ollama
 docker exec -it ollama ollama pull llama3:8b
 
 docker exec -it ollama ollama run llama3:8b
+
+
+docker run -d -p 6333:6333 -p 6334:6334 -v qdrant_data:/qdrant/storage --name qdrant qdrant/qdrant
