@@ -3,6 +3,11 @@ package org.example.config;
 import dev.langchain4j.agent.tool.ToolSpecification;
 import dev.langchain4j.agent.tool.ToolSpecifications;
 import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.mcp.McpToolProvider;
+import dev.langchain4j.mcp.client.DefaultMcpClient;
+import dev.langchain4j.mcp.client.McpClient;
+import dev.langchain4j.mcp.client.transport.McpTransport;
+import dev.langchain4j.mcp.client.transport.http.StreamableHttpMcpTransport;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
@@ -132,6 +137,19 @@ public class LLMConfig {
             return "开具成功";
         });
 
+        McpTransport transport = new StreamableHttpMcpTransport.Builder()
+                .url("http://localhost:6666/mcp")
+                .logRequests(true)
+                .logResponses(true)
+                .build();
+        McpClient mcpClient = new DefaultMcpClient.Builder()
+                .key("MyMCPClient")
+                .transport(transport)
+                .build();
+        McpToolProvider toolProvider = McpToolProvider.builder()
+                .mcpClients(mcpClient)
+                .build();
+
 
         EmbeddingStoreContentRetriever embeddingStoreContentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(embeddingModel)
@@ -143,6 +161,7 @@ public class LLMConfig {
                 .chatMemoryProvider(chatMemoryProvider)
 //                .tools(Map.of(toolSpecification, toolExecutor))
 //                .contentRetriever(embeddingStoreContentRetriever)
+                .toolProvider(toolProvider)
                 .build();
     }
 }

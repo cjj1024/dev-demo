@@ -43,3 +43,6 @@ docker exec -it ollama ollama run llama3:8b
 
 
 docker run -d -p 6333:6333 -p 6334:6334 -v qdrant_data:/qdrant/storage --name qdrant qdrant/qdrant
+
+docker run -d -it -e HTTP_PROXY=http://host.docker.internal:7897 -e HTTPS_PROXY=http://host.docker.internal:7897 -p 6666:8080 -v node24_data:/app -w /app --name nodejs24 node:24-alpine
+node build/index.js --transport http --port 8080
