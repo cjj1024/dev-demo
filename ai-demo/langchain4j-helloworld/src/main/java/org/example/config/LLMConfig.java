@@ -137,18 +137,18 @@ public class LLMConfig {
             return "开具成功";
         });
 
-        McpTransport transport = new StreamableHttpMcpTransport.Builder()
-                .url("http://localhost:6666/mcp")
-                .logRequests(true)
-                .logResponses(true)
-                .build();
-        McpClient mcpClient = new DefaultMcpClient.Builder()
-                .key("MyMCPClient")
-                .transport(transport)
-                .build();
-        McpToolProvider toolProvider = McpToolProvider.builder()
-                .mcpClients(mcpClient)
-                .build();
+//        McpTransport transport = new StreamableHttpMcpTransport.Builder()
+//                .url("http://localhost:6666/mcp")
+//                .logRequests(true)
+//                .logResponses(true)
+//                .build();
+//        McpClient mcpClient = new DefaultMcpClient.Builder()
+//                .key("MyMCPClient")
+//                .transport(transport)
+//                .build();
+//        McpToolProvider toolProvider = McpToolProvider.builder()
+//                .mcpClients(mcpClient)
+//                .build();
 
 
         EmbeddingStoreContentRetriever embeddingStoreContentRetriever = EmbeddingStoreContentRetriever.builder()
@@ -161,7 +161,7 @@ public class LLMConfig {
                 .chatMemoryProvider(chatMemoryProvider)
 //                .tools(Map.of(toolSpecification, toolExecutor))
 //                .contentRetriever(embeddingStoreContentRetriever)
-                .toolProvider(toolProvider)
+//                .toolProvider(toolProvider)
                 .build();
     }
 }
