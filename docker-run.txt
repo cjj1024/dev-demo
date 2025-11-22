@@ -46,3 +46,7 @@ docker run -d -p 6333:6333 -p 6334:6334 -v qdrant_data:/qdrant/storage --name qd
 
 docker run -d -it -e HTTP_PROXY=http://host.docker.internal:7897 -e HTTPS_PROXY=http://host.docker.internal:7897 -p 6666:8080 -v node24_data:/app -w /app --name nodejs24 node:24-alpine
 node build/index.js --transport http --port 8080
+
+
+
+docker run -ti -p 8080:8080 -e HTTP_PROXY=http://host.docker.internal:7897 -e HTTPS_PROXY=http://host.docker.internal:7897 -v localai_models:/models -v localai_build_models:/build/models -v localai_build_backends:/build/backends -v localai_tmp_generated:/tmp/generated -v localai_backends:/backends --name localai localai/localai:latest-cpu
