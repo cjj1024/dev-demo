@@ -125,4 +125,13 @@ POST http://localhost:11434/api/generate
 
 
 ###
-GET http://127.0.0.1:9001/springai/hello3?prompt=你是谁
+GET http://127.0.0.1:9002/springai/hello3?prompt=你是谁
+
+###
+GET http://127.0.0.1:9002/springai/image?prompt=jk
+
+###
+GET http://127.0.0.1:9002/springai/rag/hello?prompt=
+
+###
+POST http://127.0.0.1:9002/springai/rag/add?prompt=
