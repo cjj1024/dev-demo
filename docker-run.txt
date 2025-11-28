@@ -37,6 +37,6 @@ docker run -d --name postgres  -e POSTGRES_USER=admin  -e POSTGRES_PASSWORD=1234
 ### Ollama
 docker run -d --name ollama -p 11434:11434 -v ollama:/root/.ollama ollama/ollama
 
-docker exec -it ollama ollama pull llama3:8b
+docker exec -it ollama ollama pull huihui_ai/deepseek-r1-abliterated:8b
 
 docker exec -it ollama ollama run llama3:8b
