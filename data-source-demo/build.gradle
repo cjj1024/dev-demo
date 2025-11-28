@@ -72,6 +72,14 @@ project("mybatis-demo") {
     }
 }
 
+project("mybatis-pg-demo") {
+    dependencies {
+        implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2"
+        implementation "org.postgresql:postgresql:42.7.5"
+        implementation "org.mybatis.generator:mybatis-generator-core:1.4.1"
+    }
+}
+
 project("mybatis-sharding-demo") {
     dependencies {
         implementation project(":mybatis-demo")

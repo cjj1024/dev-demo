@@ -98,8 +98,20 @@ GET http://127.0.0.1:8080/mongo-demo/search?name=Bob
 
 
 ###
-GET http://127.0.0.1:9001/langchain/memory/hello?id=1&question=开具一个发票, 公司是p站, 金额100元
+GET http://127.0.0.1:9001/langchain/memory/write?id=1&question=黑
+###
+POST http://127.0.0.1:9001/langchain/embedding/hello?question=你好
 
+###
+GET http://127.0.0.1:9001/langchain/embedding/query?question=你好
+
+###
+POST http://127.0.0.1:9001/langchain/rag/add?path=D:\Cache\ESJZone-novel-mirror-main\Novel\日輕\半龙少女.txt
+###
+GET http://127.0.0.1:9001/langchain/rag/chat?id=1&question=介绍一下半龙少女的艾露
+
+###
+POST http://127.0.0.1:9001/langchain/mcp/chat?question=请使用howtocook的MCP服务为4人晚餐推荐菜单
 
 
 ###
@@ -108,5 +120,18 @@ POST http://localhost:11434/api/generate
 {
     "stream": false,
     "model": "mannix/llama3.1-8b-abliterated:q4_0",
-    "prompt": "发票的英文是什么"
+    "prompt": "xie"
 }
+
+
+###
+GET http://127.0.0.1:9002/springai/hello3?prompt=你是谁
+
+###
+GET http://127.0.0.1:9002/springai/image?prompt=jk
+
+###
+GET http://127.0.0.1:9002/springai/rag/hello?prompt=
+
+###
+POST http://127.0.0.1:9002/springai/rag/add?prompt=

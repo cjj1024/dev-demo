@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.payments.infrastructure.persistence.mybatis.PaymentMapper">
+
+    <resultMap id="PaymentResultMap" type="com.example.payments.infrastructure.persistence.mybatis.PaymentRecord">
+        <id property="id" column="id" javaType="java.util.UUID" jdbcType="CHAR" typeHandler="org.apache.ibatis.type.UUIDTypeHandler"/>
+        <result property="customerId" column="customer_id" javaType="java.util.UUID" jdbcType="CHAR" typeHandler="org.apache.ibatis.type.UUIDTypeHandler"/>
+        <result property="paymentMethodId" column="payment_method_id" javaType="java.util.UUID" jdbcType="CHAR" typeHandler="org.apache.ibatis.type.UUIDTypeHandler"/>
+        <result property="paymentMethodType" column="payment_method_type" javaType="com.example.payments.domain.model.payment.PaymentMethodType"/>
+        <result property="paymentMethodToken" column="payment_method_token"/>
+        <result property="amount" column="amount"/>
+        <result property="currency" column="currency"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status" javaType="com.example.payments.domain.model.payment.PaymentStatus"/>
+        <result property="riskVerdict" column="risk_verdict"/>
+        <result property="riskReason" column="risk_reason"/>
+        <result property="riskDecidedAt" column="risk_decided_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="java.util.UUID" resultMap="PaymentResultMap">
+        SELECT
+            id,
+            customer_id,
+            payment_method_id,
+            payment_method_type,
+            payment_method_token,
+            amount,
+            currency,
+            description,
+            status,
+            risk_verdict,
+            risk_reason,
+            risk_decided_at,
+            created_at,
+            updated_at
+        FROM payment
+        WHERE id = #{id}
+    </select>
+
+    <insert id="upsert" parameterType="com.example.payments.infrastructure.persistence.mybatis.PaymentRecord">
+        INSERT INTO payment (
+            id,
+            customer_id,
+            payment_method_id,
+            payment_method_type,
+            payment_method_token,
+            amount,
+            currency,
+            description,
+            status,
+            risk_verdict,
+            risk_reason,
+            risk_decided_at,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{id,jdbcType=CHAR,typeHandler=org.apache.ibatis.type.UUIDTypeHandler},
+            #{customerId,jdbcType=CHAR,typeHandler=org.apache.ibatis.type.UUIDTypeHandler},
+            #{paymentMethodId,jdbcType=CHAR,typeHandler=org.apache.ibatis.type.UUIDTypeHandler},
+            #{paymentMethodType},
+            #{paymentMethodToken},
+            #{amount},
+            #{currency},
+            #{description},
+            #{status},
+            #{riskVerdict},
+            #{riskReason},
+            #{riskDecidedAt},
+            #{createdAt},
+            #{updatedAt}
+        )
+        ON DUPLICATE KEY UPDATE
+            customer_id = VALUES(customer_id),
+            payment_method_id = VALUES(payment_method_id),
+            payment_method_type = VALUES(payment_method_type),
+            payment_method_token = VALUES(payment_method_token),
+            amount = VALUES(amount),
+            currency = VALUES(currency),
+            description = VALUES(description),
+            status = VALUES(status),
+            risk_verdict = VALUES(risk_verdict),
+            risk_reason = VALUES(risk_reason),
+            risk_decided_at = VALUES(risk_decided_at),
+            created_at = VALUES(created_at),
+            updated_at = VALUES(updated_at);
+    </insert>
+</mapper>
+

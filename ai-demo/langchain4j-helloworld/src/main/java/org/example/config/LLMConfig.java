@@ -2,15 +2,25 @@ package org.example.config;
 
 import dev.langchain4j.agent.tool.ToolSpecification;
 import dev.langchain4j.agent.tool.ToolSpecifications;
+import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.mcp.McpToolProvider;
+import dev.langchain4j.mcp.client.DefaultMcpClient;
+import dev.langchain4j.mcp.client.McpClient;
+import dev.langchain4j.mcp.client.transport.McpTransport;
+import dev.langchain4j.mcp.client.transport.http.StreamableHttpMcpTransport;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.request.json.JsonObjectSchema;
+import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.tool.ToolExecutor;
+import dev.langchain4j.store.embedding.EmbeddingStore;
 import org.example.listener.TestChatModelListener;
 import org.example.service.ChatAssistant;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -92,8 +102,20 @@ public class LLMConfig {
                 .build();
     }
 
+    @Bean(name = "localEmbeddingModel")
+    public EmbeddingModel localEmbeddingModel() {
+        return OpenAiEmbeddingModel.builder()
+                .modelName("embeddinggemma:300m")
+                .baseUrl("http://localhost:11434/v1")
+                .timeout(Duration.ofMinutes(10))
+                .build();
+    }
+
     @Bean(name = "memoryChatAssistant")
-    public ChatAssistant memoryChatAssistant(@Qualifier("poixe") ChatModel chatModel, RedisChatMemoryStore redisChatMemoryStore) {
+    public ChatAssistant memoryChatAssistant(@Qualifier("local") ChatModel chatModel,
+                                             RedisChatMemoryStore redisChatMemoryStore,
+                                             EmbeddingStore<TextSegment> embeddingStore,
+                                             EmbeddingModel embeddingModel) {
         ChatMemoryProvider chatMemoryProvider = memoryId -> MessageWindowChatMemory.builder()
                 .id(memoryId)
                 .maxMessages(100)
@@ -115,10 +137,31 @@ public class LLMConfig {
             return "开具成功";
         });
 
+//        McpTransport transport = new StreamableHttpMcpTransport.Builder()
+//                .url("http://localhost:6666/mcp")
+//                .logRequests(true)
+//                .logResponses(true)
+//                .build();
+//        McpClient mcpClient = new DefaultMcpClient.Builder()
+//                .key("MyMCPClient")
+//                .transport(transport)
+//                .build();
+//        McpToolProvider toolProvider = McpToolProvider.builder()
+//                .mcpClients(mcpClient)
+//                .build();
+
+
+        EmbeddingStoreContentRetriever embeddingStoreContentRetriever = EmbeddingStoreContentRetriever.builder()
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
+                .build();
+
         return AiServices.builder(ChatAssistant.class)
                 .chatModel(chatModel)
                 .chatMemoryProvider(chatMemoryProvider)
-                .tools(Map.of(toolSpecification, toolExecutor))
+//                .tools(Map.of(toolSpecification, toolExecutor))
+//                .contentRetriever(embeddingStoreContentRetriever)
+//                .toolProvider(toolProvider)
                 .build();
     }
 }

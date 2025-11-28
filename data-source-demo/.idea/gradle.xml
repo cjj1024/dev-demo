@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/kafka-demo" />
             <option value="$PROJECT_DIR$/mongo-demo" />
             <option value="$PROJECT_DIR$/mybatis-demo" />
+            <option value="$PROJECT_DIR$/mybatis-pg-demo" />
             <option value="$PROJECT_DIR$/mybatis-sharding-demo" />
             <option value="$PROJECT_DIR$/nacos-demo" />
             <option value="$PROJECT_DIR$/redis-demo" />

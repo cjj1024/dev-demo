@@ -5,13 +5,13 @@ docker run -d --name redis -p 6379:6379  -v redis_data:/data  redis:7.0 redis-se
 
 docker run -d --name redis -p 6379:6379  -v redis_data:/data  -v ${PWD}/redis.conf:/usr/local/etc/redis/redis.conf redis:7.0 redis-server /usr/local/etc/redis/redis.conf
 
-docker run -d --name mongodb -p 27017:27017 -v mongodb_data:/data/db  mongo:7.0
+docker run -d --name mongodb -p 27017:27017 -v mongodb_data:/data/db -v mongodb_config:/data/configdb  mongo:7.0
 
 docker run -d --name zookeeper --network dev_net -p 2181:2181 -p 2888:2888 -p 3888:3888 -v zk_data:/data -v zk_datalog:/datalog  -v zk_logs:/logs -v ${PWD}/zk_conf:/conf -e ZOO_CONF_DIR=/conf  zookeeper:3.9
 
 
 
-docker run -d --name kafka --network dev_net --hostname kafka -p 9092:9092 -e CLUSTER_ID=kafka_clsuter_1 -e KAFKA_BROKER_ID=1 -e KAFKA_PROCESS_ROLES=broker,controller -e KAFKA_NODE_ID=1 -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093 -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 -e KAFKA_AUTO_CREATE_TOPICS_ENABLE=true -v kafka_data:/var/lib/kafka/data confluentinc/cp-kafka:latest
+docker run -d --name kafka --network dev_net --hostname kafka -p 9092:9092 -e CLUSTER_ID=kafka_clsuter_1 -e KAFKA_BROKER_ID=1 -e KAFKA_PROCESS_ROLES=broker,controller -e KAFKA_NODE_ID=1 -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093 -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 -e KAFKA_AUTO_CREATE_TOPICS_ENABLE=true -v kafka_data:/var/lib/kafka/data -v kafka_secrets:/etc/kafka/secrets confluentinc/cp-kafka:latest
 
 docker run -d --name etcd --network dev_net -p 2379:2379 -p 2380:2380 -v etcd_data:/etcd-data -e ALLOW_NONE_AUTHENTICATION=yes -e ETCD_NAME=node1 -e ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379 -e ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379 -e ETCD_INITIAL_ADVERTISE_PEER_URLS=http://0.0.0.0:2380 -e ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380 -e ETCD_INITIAL_CLUSTER=node1=http://0.0.0.0:2380   quay.io/coreos/etcd:v3.5.7
 
@@ -40,3 +40,13 @@ docker run -d --name ollama -p 11434:11434 -v ollama:/root/.ollama ollama/ollama
 docker exec -it ollama ollama pull huihui_ai/deepseek-r1-abliterated:8b
 
 docker exec -it ollama ollama run llama3:8b
+
+
+docker run -d -p 6333:6333 -p 6334:6334 -v qdrant_data:/qdrant/storage --name qdrant qdrant/qdrant
+
+docker run -d -it -e HTTP_PROXY=http://host.docker.internal:7897 -e HTTPS_PROXY=http://host.docker.internal:7897 -p 6666:8080 -v node24_data:/app -w /app --name nodejs24 node:24-alpine
+node build/index.js --transport http --port 8080
+
+
+
+docker run -ti -p 8080:8080 -e HTTP_PROXY=http://host.docker.internal:7897 -e HTTPS_PROXY=http://host.docker.internal:7897 -v localai_models:/models -v localai_build_models:/build/models -v localai_build_backends:/build/backends -v localai_tmp_generated:/tmp/generated -v localai_backends:/backends --name localai localai/localai:latest-cpu
