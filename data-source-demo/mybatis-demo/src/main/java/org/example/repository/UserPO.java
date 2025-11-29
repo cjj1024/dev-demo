@@ -2,7 +2,7 @@ package org.example.repository;
 
 import java.time.LocalDateTime;
 
-public class User {
+public class UserPO {
     private Long id;
 
     private String username;

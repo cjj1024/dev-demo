@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.example.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="org.example.repository.User">
+<mapper namespace="org.example.mapper.UserPOMapper">
+  <resultMap id="BaseResultMap" type="org.example.repository.UserPO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="email" jdbcType="VARCHAR" property="email" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     id, username, email, age, create_time, update_time, user_id
   </sql>
-  <select id="selectByExample" parameterType="org.example.repository.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="org.example.repository.UserPOExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -95,13 +95,13 @@
     delete from user
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="org.example.repository.UserExample">
+  <delete id="deleteByExample" parameterType="org.example.repository.UserPOExample">
     delete from user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="org.example.repository.User">
+  <insert id="insert" parameterType="org.example.repository.UserPO">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -112,7 +112,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="org.example.repository.User">
+  <insert id="insertSelective" parameterType="org.example.repository.UserPO">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -158,7 +158,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="org.example.repository.UserExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="org.example.repository.UserPOExample" resultType="java.lang.Long">
     select count(*) from user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -206,7 +206,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="org.example.repository.User">
+  <update id="updateByPrimaryKeySelective" parameterType="org.example.repository.UserPO">
     update user
     <set>
       <if test="username != null">
@@ -230,7 +230,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="org.example.repository.User">
+  <update id="updateByPrimaryKey" parameterType="org.example.repository.UserPO">
     update user
     set username = #{username,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},

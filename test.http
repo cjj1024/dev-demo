@@ -122,6 +122,8 @@ POST http://localhost:11434/api/generate
     "model": "mannix/llama3.1-8b-abliterated:q4_0",
     "prompt": "xie"
 }
+###
+GET http://localhost:11434/v1
 
 
 ###
