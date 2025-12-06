@@ -149,3 +149,10 @@ project("mongo-demo") {
         implementation "org.springframework.boot:spring-boot-starter-web"
     }
 }
+
+project("rocksdb-demo") {
+    dependencies {
+        implementation 'org.rocksdb:rocksdbjni:9.11.2'
+        implementation "org.springframework.boot:spring-boot-starter-web"
+    }
+}
